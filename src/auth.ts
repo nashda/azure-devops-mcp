@@ -92,6 +92,19 @@ function createAuthenticator(type: string, tenantId?: string): () => Promise<str
         return token;
       };
 
+    case "pat":
+      logger.debug(`Authenticator: Using PAT authentication (ADO_MCP_AUTH_TOKEN) for self-hosted server`);
+      return async () => {
+        logger.debug(`${type}: Reading PAT from ADO_MCP_AUTH_TOKEN environment variable`);
+        const token = process.env["ADO_MCP_AUTH_TOKEN"];
+        if (!token) {
+          logger.error(`${type}: ADO_MCP_AUTH_TOKEN environment variable is not set or empty`);
+          throw new Error("Environment variable 'ADO_MCP_AUTH_TOKEN' is not set or empty. Please set it with a valid Personal Access Token.");
+        }
+        logger.debug(`${type}: Successfully retrieved PAT from environment variable`);
+        return token;
+      };
+
     case "azcli":
     case "env":
       if (type !== "env") {

@@ -5,7 +5,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebApi } from "azure-devops-node-api";
 import { AlertType, AlertValidityStatus, Confidence, Severity, State } from "azure-devops-node-api/interfaces/AlertInterfaces.js";
 import { z } from "zod";
-import { getEnumKeys, mapStringArrayToEnum, mapStringToEnum } from "../utils.js";
+import { formatApiError, getEnumKeys, mapStringArrayToEnum, mapStringToEnum } from "../utils.js";
 
 const ADVSEC_TOOLS = {
   get_alerts: "advsec_get_alerts",

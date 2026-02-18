@@ -25,7 +25,7 @@ import { z } from "zod";
 import { getCurrentUserDetails, getUserIdFromEmail } from "./auth.js";
 import { GitRepository } from "azure-devops-node-api/interfaces/TfvcInterfaces.js";
 import { WebApiTagDefinition } from "azure-devops-node-api/interfaces/CoreInterfaces.js";
-import { getEnumKeys } from "../utils.js";
+import { formatApiError, getEnumKeys } from "../utils.js";
 
 const REPO_TOOLS = {
   list_repos_by_project: "repo_list_repos_by_project",
@@ -186,12 +186,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(trimmedPullRequest, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error creating pull request: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error creating pull request");
       }
     }
   );
@@ -288,12 +283,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           };
         }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error creating branch: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error creating branch");
       }
     }
   );
@@ -397,12 +387,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(trimmedUpdatedPullRequest, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error updating pull request: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error updating pull request");
       }
     }
   );
@@ -451,12 +436,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           };
         }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error updating pull request reviewers: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error updating pull request reviewers");
       }
     }
   );
@@ -495,12 +475,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(trimmedRepositories, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error listing repositories: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing repositories");
       }
     }
   );
@@ -648,12 +623,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(filteredPullRequests, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error listing pull requests: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing pull requests");
       }
     }
   );
@@ -721,12 +691,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(trimmedThreads, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error listing pull request threads: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing pull request threads");
       }
     }
   );
@@ -766,12 +731,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(trimmedComments, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error listing pull request thread comments: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing pull request thread comments");
       }
     }
   );
@@ -796,12 +756,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(filteredBranches, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error listing branches: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing branches");
       }
     }
   );
@@ -826,12 +781,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(filteredBranches, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error listing my branches: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing my branches");
       }
     }
   );
@@ -862,12 +812,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(repository, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error getting repository: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error getting repository");
       }
     }
   );
@@ -900,12 +845,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(branch, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error getting branch: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error getting branch");
       }
     }
   );
@@ -961,12 +901,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(pullRequest, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error getting pull request: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error getting pull request");
       }
     }
   );
@@ -1006,12 +941,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: `Comment successfully added to thread ${threadId}.` }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error replying to comment: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error replying to comment");
       }
     }
   );
@@ -1154,12 +1084,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(trimmedThread, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error creating pull request thread: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error creating pull request thread");
       }
     }
   );
@@ -1209,12 +1134,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(trimmedThread, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error updating pull request thread: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error updating pull request thread");
       }
     }
   );
@@ -1432,12 +1352,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(queryResult, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error querying pull requests by commits: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error querying pull requests by commits");
       }
     }
   );

@@ -5,6 +5,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebApi } from "azure-devops-node-api";
 import { z } from "zod";
 import { TreeStructureGroup, TreeNodeStructureType, WorkItemClassificationNode } from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces.js";
+import { formatApiError } from "../utils.js";
 
 const WORK_TOOLS = {
   list_team_iterations: "work_list_team_iterations",
@@ -39,12 +40,7 @@ function configureWorkTools(server: McpServer, _: () => Promise<string>, connect
           content: [{ type: "text", text: JSON.stringify(iterations, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching team iterations: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching team iterations");
       }
     }
   );
@@ -97,12 +93,7 @@ function configureWorkTools(server: McpServer, _: () => Promise<string>, connect
           content: [{ type: "text", text: JSON.stringify(results, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error creating iterations: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error creating iterations");
       }
     }
   );
@@ -162,12 +153,7 @@ function configureWorkTools(server: McpServer, _: () => Promise<string>, connect
           content: [{ type: "text", text: JSON.stringify(filteredResults, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching iterations: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching iterations");
       }
     }
   );
@@ -210,12 +196,7 @@ function configureWorkTools(server: McpServer, _: () => Promise<string>, connect
           content: [{ type: "text", text: JSON.stringify(results, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error assigning iterations: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error assigning iterations");
       }
     }
   );
@@ -263,12 +244,7 @@ function configureWorkTools(server: McpServer, _: () => Promise<string>, connect
           content: [{ type: "text", text: JSON.stringify(simplifiedResults, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error getting team capacity: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error getting team capacity");
       }
     }
   );
@@ -347,11 +323,7 @@ function configureWorkTools(server: McpServer, _: () => Promise<string>, connect
           content: [{ type: "text", text: JSON.stringify(simplifiedResult, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error updating team capacity: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error updating team capacity");
       }
     }
   );
@@ -378,12 +350,7 @@ function configureWorkTools(server: McpServer, _: () => Promise<string>, connect
           content: [{ type: "text", text: JSON.stringify(rawResults, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error getting iteration capacities: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error getting iteration capacities");
       }
     }
   );

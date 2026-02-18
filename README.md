@@ -161,6 +161,34 @@ We recommend that you always enable `core` tools so that you can fetch project l
 
 > By default all domains are loaded
 
+## 🏢 Self-Hosted / Azure DevOps Server
+
+This MCP server supports self-hosted Azure DevOps Server (formerly TFS) in addition to Azure DevOps Services (cloud).
+
+### Usage
+
+Use the `--server-url` flag to point to your on-premises instance:
+
+```bash
+npx @anthropic/azure-devops-mcp --server-url https://tfs.company.com/DefaultCollection --authentication envvar
+```
+
+Set the `ADO_MCP_AUTH_TOKEN` environment variable to a Personal Access Token (PAT) generated from your Azure DevOps Server instance:
+
+```bash
+export ADO_MCP_AUTH_TOKEN="your-personal-access-token"
+```
+
+You can also use `--authentication pat` which behaves identically to `envvar` but is named more clearly for PAT-based auth:
+
+```bash
+npx @anthropic/azure-devops-mcp --server-url https://tfs.company.com/DefaultCollection --authentication pat
+```
+
+When `--server-url` is provided, the `<organization>` positional argument is optional. The PAT handler (`getPersonalAccessTokenHandler`) is automatically used instead of the bearer token handler when `--server-url` is combined with `envvar` or `pat` authentication.
+
+> **Note:** Some API endpoints may not be available on older Azure DevOps Server versions. The server will return a friendly message instead of crashing when an endpoint returns 404.
+
 ## 📝 Troubleshooting
 
 See the [Troubleshooting guide](./docs/TROUBLESHOOTING.md) for help with common issues and logging.

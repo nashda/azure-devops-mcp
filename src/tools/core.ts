@@ -8,6 +8,7 @@ import { searchIdentities } from "./auth.js";
 
 import type { ProjectInfo } from "azure-devops-node-api/interfaces/CoreInterfaces.js";
 import { IdentityBase } from "azure-devops-node-api/interfaces/IdentitiesInterfaces.js";
+import { formatApiError } from "../utils.js";
 
 const CORE_TOOLS = {
   list_project_teams: "core_list_project_teams",
@@ -44,12 +45,7 @@ function configureCoreTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(teams, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching project teams: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching project teams");
       }
     }
   );
@@ -80,12 +76,7 @@ function configureCoreTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(filteredProject, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching projects: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching projects");
       }
     }
   );
@@ -116,12 +107,7 @@ function configureCoreTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(identitiesTrimmed, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching identities: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching identities");
       }
     }
   );

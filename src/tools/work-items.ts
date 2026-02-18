@@ -6,7 +6,7 @@ import { WebApi } from "azure-devops-node-api";
 import { WorkItemExpand, WorkItemRelation } from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces.js";
 import { QueryExpand } from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces.js";
 import { z } from "zod";
-import { batchApiVersion, markdownCommentsApiVersion, getEnumKeys, safeEnumConvert, encodeFormattedValue } from "../utils.js";
+import { formatApiError, batchApiVersion, markdownCommentsApiVersion, getEnumKeys, safeEnumConvert, encodeFormattedValue } from "../utils.js";
 
 const WORKITEM_TOOLS = {
   my_work_items: "wit_my_work_items",
@@ -81,11 +81,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(backlogs, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error listing backlogs: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing backlogs");
       }
     }
   );
@@ -110,11 +106,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(workItems, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error listing backlog work items: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing backlog work items");
       }
     }
   );
@@ -139,11 +131,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(workItems, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error retrieving work items: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error retrieving work items");
       }
     }
   );
@@ -199,11 +187,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(workitems, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error retrieving work items batch: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error retrieving work items batch");
       }
     }
   );
@@ -232,12 +216,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(workItem, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error retrieving work item: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error retrieving work item");
       }
     }
   );
@@ -260,11 +239,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(comments, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error listing work item comments: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing work item comments");
       }
     }
   );
@@ -309,11 +284,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: comments }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error adding work item comment: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error adding work item comment");
       }
     }
   );
@@ -370,11 +341,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(revisions, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error listing work item revisions: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing work item revisions");
       }
     }
   );
@@ -503,12 +470,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error creating child work items: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error creating child work items");
       }
     }
   );
@@ -573,12 +535,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           ],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error linking work item to pull request: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error linking work item to pull request");
       }
     }
   );
@@ -603,11 +560,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(workItems, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error retrieving work items for iteration: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error retrieving work items for iteration");
       }
     }
   );
@@ -649,11 +602,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(updatedWorkItem, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error updating work item: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error updating work item");
       }
     }
   );
@@ -676,11 +625,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(workItemTypeInfo, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error retrieving work item type: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error retrieving work item type");
       }
     }
   );
@@ -735,12 +680,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(newWorkItem, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error creating work item: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error creating work item");
       }
     }
   );
@@ -770,11 +710,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(queryDetails, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error retrieving query: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error retrieving query");
       }
     }
   );
@@ -810,11 +746,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(queryResult, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error retrieving query results: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error retrieving query results");
       }
     }
   );
@@ -893,11 +825,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error updating work items in batch: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error updating work items in batch");
       }
     }
   );
@@ -973,11 +901,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error linking work items: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error linking work items");
       }
     }
   );
@@ -1205,12 +1129,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
           ],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error adding artifact link to work item: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error adding artifact link to work item");
       }
     }
   );

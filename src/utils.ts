@@ -67,6 +67,31 @@ export function safeEnumConvert<T extends Record<string, string | number>>(enumO
  * @param format The format of the field ('Markdown' or 'Html')
  * @returns The encoded text, or original text if format is not Markdown
  */
+/**
+ * Checks if an error is a 404 Not Found response from Azure DevOps.
+ * Useful for graceful handling when self-hosted Server versions don't support certain APIs.
+ */
+export function isNotFoundError(error: unknown): boolean {
+  if (error && typeof error === "object") {
+    const e = error as Record<string, unknown>;
+    if (e.statusCode === 404) return true;
+    if (typeof e.message === "string" && e.message.includes("404")) return true;
+  }
+  return false;
+}
+
+/**
+ * Wraps an error message with a friendly note when the API returns 404,
+ * which commonly happens on self-hosted Azure DevOps Server instances.
+ */
+export function formatApiError(error: unknown, context: string): { content: { type: "text"; text: string }[]; isError: true } {
+  const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+  const text = isNotFoundError(error)
+    ? `${context}: This API endpoint is not available (HTTP 404). This may be because your Azure DevOps Server version does not support this feature.`
+    : `${context}: ${errorMessage}`;
+  return { content: [{ type: "text" as const, text }], isError: true };
+}
+
 export function encodeFormattedValue(value: string, format?: "Markdown" | "Html"): string {
   if (!value || format !== "Markdown") return value;
   const result = value.replace(/</g, "&lt;").replace(/>/g, "&gt;");

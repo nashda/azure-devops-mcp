@@ -5,6 +5,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebApi } from "azure-devops-node-api";
 import { SuiteExpand, TestPlanCreateParams } from "azure-devops-node-api/interfaces/TestPlanInterfaces.js";
 import { z } from "zod";
+import { formatApiError } from "../utils.js";
 
 const Test_Plan_Tools = {
   create_test_plan: "testplan_create_test_plan",
@@ -40,11 +41,7 @@ function configureTestPlanTools(server: McpServer, _: () => Promise<string>, con
           content: [{ type: "text", text: JSON.stringify(testPlans, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error listing test plans: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing test plans");
       }
     }
   );
@@ -81,11 +78,7 @@ function configureTestPlanTools(server: McpServer, _: () => Promise<string>, con
           content: [{ type: "text", text: JSON.stringify(createdTestPlan, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error creating test plan: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error creating test plan");
       }
     }
   );
@@ -174,11 +167,7 @@ function configureTestPlanTools(server: McpServer, _: () => Promise<string>, con
           content: [{ type: "text", text: JSON.stringify(addedTestCases, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error adding test cases to suite: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error adding test cases to suite");
       }
     }
   );
@@ -268,11 +257,7 @@ function configureTestPlanTools(server: McpServer, _: () => Promise<string>, con
           content: [{ type: "text", text: JSON.stringify(workItem, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error creating test case: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error creating test case");
       }
     }
   );
@@ -315,11 +300,7 @@ function configureTestPlanTools(server: McpServer, _: () => Promise<string>, con
           content: [{ type: "text", text: JSON.stringify(workItem, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error updating test case steps: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error updating test case steps");
       }
     }
   );
@@ -342,11 +323,7 @@ function configureTestPlanTools(server: McpServer, _: () => Promise<string>, con
           content: [{ type: "text", text: JSON.stringify(testcases, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error listing test cases: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing test cases");
       }
     }
   );
@@ -368,11 +345,7 @@ function configureTestPlanTools(server: McpServer, _: () => Promise<string>, con
           content: [{ type: "text", text: JSON.stringify(testResults, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error fetching test results: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching test results");
       }
     }
   );
@@ -438,11 +411,7 @@ function configureTestPlanTools(server: McpServer, _: () => Promise<string>, con
           content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-        return {
-          content: [{ type: "text", text: `Error listing test suites: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error listing test suites");
       }
     }
   );

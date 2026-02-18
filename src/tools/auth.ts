@@ -4,6 +4,7 @@
 import { WebApi } from "azure-devops-node-api";
 import { apiVersion } from "../utils.js";
 import { IdentityBase } from "azure-devops-node-api/interfaces/IdentitiesInterfaces.js";
+import { formatApiError } from "../utils.js";
 
 interface IdentitiesResponse {
   value: IdentityBase[];

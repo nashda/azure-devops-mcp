@@ -5,7 +5,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebApi } from "azure-devops-node-api";
 import { z } from "zod";
 import { WikiPagesBatchRequest } from "azure-devops-node-api/interfaces/WikiInterfaces.js";
-import { apiVersion } from "../utils.js";
+import { formatApiError, apiVersion } from "../utils.js";
 
 const WIKI_TOOLS = {
   list_wikis: "wiki_list_wikis",
@@ -38,12 +38,7 @@ function configureWikiTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(wiki, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching wiki: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching wiki");
       }
     }
   );
@@ -68,12 +63,7 @@ function configureWikiTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(wikis, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching wikis: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching wikis");
       }
     }
   );
@@ -109,12 +99,7 @@ function configureWikiTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(pages, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching wiki pages: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching wiki pages");
       }
     }
   );
@@ -171,12 +156,7 @@ function configureWikiTools(server: McpServer, tokenProvider: () => Promise<stri
           content: [{ type: "text", text: JSON.stringify(pageData, null, 2) }],
         };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching wiki page metadata: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching wiki page metadata");
       }
     }
   );
@@ -269,12 +249,7 @@ function configureWikiTools(server: McpServer, tokenProvider: () => Promise<stri
 
         return { content: [{ type: "text", text: JSON.stringify(pageContent, null, 2) }] };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error fetching wiki page content: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error fetching wiki page content");
       }
     }
   );
@@ -390,12 +365,7 @@ function configureWikiTools(server: McpServer, tokenProvider: () => Promise<stri
           throw fetchError;
         }
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-
-        return {
-          content: [{ type: "text", text: `Error creating/updating wiki page: ${errorMessage}` }],
-          isError: true,
-        };
+        return formatApiError(error, "Error creating/updating wiki page");
       }
     }
   );
