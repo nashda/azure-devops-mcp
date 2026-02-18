@@ -9,6 +9,7 @@ This guide will help you get started with the Azure DevOps MCP Server in differe
 - [Getting started with Claude Code](#-using-mcp-server-with-claude-code)
 - [Getting started with Claude Desktop](#️-using-mcp-server-with-claude-desktop)
 - [Getting started with Cursor](#-using-mcp-server-with-cursor)
+- [Self-Hosted / Azure DevOps Server Configuration](#-self-hosted--azure-devops-server-configuration)
 - [Optimizing Your Experience](#-optimizing-your-experience)
 
 ## 🕐 Prerequisites
@@ -292,6 +293,113 @@ Start a new chat, then click the **Search and Tools** icon. The `ado` toolset sh
 You’re ready to start using the Azure DevOps MCP Server in Claude Desktop. Try a simple request such as: `get list of ado projects`.
 
 For additional guidance on Claude Desktop, see the [Quickstart](https://modelcontextprotocol.io/quickstart/user#installing-the-filesystem-server).
+
+### 🏢 Self-Hosted / Azure DevOps Server Configuration
+
+The examples above use Azure DevOps Services (cloud). For self-hosted Azure DevOps Server (formerly TFS), use the `--server-url` flag and PAT authentication.
+
+#### Prerequisites
+
+1. Generate a [Personal Access Token (PAT)](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate) from your Azure DevOps Server instance
+2. Set the `ADO_MCP_AUTH_TOKEN` environment variable:
+   ```bash
+   export ADO_MCP_AUTH_TOKEN="your-personal-access-token"
+   ```
+
+#### VS Code / GitHub Copilot (Self-Hosted)
+
+Add a `.vscode/mcp.json` file:
+
+```json
+{
+  "servers": {
+    "ado": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@azure-devops/mcp", "--server-url", "https://tfs.company.com/DefaultCollection", "--authentication", "pat"],
+      "env": {
+        "ADO_MCP_AUTH_TOKEN": "your-personal-access-token"
+      }
+    }
+  }
+}
+```
+
+Replace `https://tfs.company.com/DefaultCollection` with your Azure DevOps Server URL.
+
+#### GitHub Copilot CLI (Self-Hosted)
+
+Create or edit `~/.copilot/mcp-config.json`:
+
+```json
+{
+  "mcpServers": {
+    "ado": {
+      "command": "npx",
+      "args": ["-y", "@azure-devops/mcp", "--server-url", "https://tfs.company.com/DefaultCollection", "--authentication", "pat"],
+      "env": {
+        "ADO_MCP_AUTH_TOKEN": "your-personal-access-token"
+      },
+      "tools": ["*"]
+    }
+  }
+}
+```
+
+#### Claude Code (Self-Hosted)
+
+```bash
+claude mcp add azure-devops -e ADO_MCP_AUTH_TOKEN=your-pat -- npx -y @azure-devops/mcp --server-url https://tfs.company.com/DefaultCollection --authentication pat
+```
+
+#### Claude Desktop (Self-Hosted)
+
+Open **File > Settings > Developer > Edit Config** and add:
+
+```json
+{
+  "mcpServers": {
+    "ado": {
+      "command": "npx",
+      "args": ["-y", "@azure-devops/mcp", "--server-url", "https://tfs.company.com/DefaultCollection", "--authentication", "pat"],
+      "env": {
+        "ADO_MCP_AUTH_TOKEN": "your-personal-access-token"
+      }
+    }
+  }
+}
+```
+
+#### Cursor (Self-Hosted)
+
+Create a `.cursor/mcp.json` file:
+
+```json
+{
+  "mcpServers": {
+    "ado": {
+      "command": "npx",
+      "args": ["-y", "@azure-devops/mcp", "--server-url", "https://tfs.company.com/DefaultCollection", "--authentication", "pat"],
+      "env": {
+        "ADO_MCP_AUTH_TOKEN": "your-personal-access-token"
+      }
+    }
+  }
+}
+```
+
+#### From Source (Self-Hosted)
+
+If running from a local clone:
+
+```bash
+cd /path/to/ado-server-mcp
+npm install
+npm run build
+ADO_MCP_AUTH_TOKEN="your-pat" node dist/index.js --server-url https://tfs.company.com/DefaultCollection --authentication pat
+```
+
+> **Note:** Some API endpoints may not be available on older Azure DevOps Server versions. The server will return a friendly message instead of crashing when an endpoint returns 404.
 
 ### 🍇 Using MCP Server with Cursor
 
